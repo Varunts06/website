@@ -1,0 +1,46 @@
+<h1><center>Fast Fourier Transforms</center></h1><hr size="5" color="grey"><a href="blockchain.html">Blockchains</a>
+<a href="economics.html" style="float: right;">Economics</a>
+<center><a href="cryptography.html">Cryptography</a></center>
+<a href="General.html">General</a>
+<a href="gitcoin.html" style="float: right;">Gitcoin</a>
+<center><a href="math.html">math</a></center>
+<hr size="5" color="grey">
+<a href="front.html" style="float: right;">see all posts</a><br>
+<p>One of the more interesting algorithms in number theory is the Fast Fourier transform (FFT). FFTs are a key building block in many algorithms, including extremely fast multiplication of large numbers, multiplication of polynomials, and extremely fast generation and recovery of erasure codes. Erasure codes in particular are highly versatile; in addition to their basic use cases in fault-tolerant data storage and recovery, erasure codes also have more advanced use cases such as securing data availability in scalable blockchains and STARKs. This article will go into what fast Fourier transforms are, and how some of the simpler algorithms for computing them work.
+
+    </p>
+    <h3>Background</h3>
+    <p>The original Fourier transform is a mathematical operation that is often described as converting data between the "frequency domain" and the "time domain". What this means more precisely is that if you have a piece of data, then running the algorithm would come up with a collection of sine waves with different frequencies and amplitudes that, if you added them together, would approximate the original data. Fourier transforms can be used for such wonderful things as expressing square orbits through epicycles and deriving a set of equations that can draw an elephant:</p>
+    <p>The kind of Fourier transform we'll be talking about in this post is a similar algorithm, except instead of being a continuous Fourier transform over real or complex numbers, it's a discrete Fourier transform over finite fields (see the "A Modular Math Interlude" section here for a refresher on what finite fields are). Instead of talking about converting between "frequency domain" and "time domain", here we'll talk about two different operations: multi-point polynomial evaluation (evaluating a degree 
+        polynomial at 
+        different points) and its inverse, polynomial interpolation (given the evaluations of a degree 
+        polynomial at 
+        different points, recovering the polynomial). For example, if we are operating in the prime field with modulus 5, then the polynomial 
+       ²
+        (for convenience we can write the coefficients in increasing order: 
+       ) evaluated at the points 
+        gives the values 
+        (not 
+        because we're operating in a finite field where the numbers wrap around at 5), and we can actually take the evaluations 
+        and the coordinates they were evaluated at (
+       ) to recover the original polynomial 
+       .</p>
+       <h3>Fast Fourier Transforms</h3>
+       <p>There is a price you have to pay for using this much faster algorithm, which is that you cannot choose any arbitrary field and any arbitrary domain. Whereas with Lagrange interpolation, you could choose whatever x coordinates and y coordinates you wanted, and whatever field you wanted (you could even do it over plain old real numbers), and you could get a polynomial that passes through them., with an FFT, you have to use a finite field, and the domain must be a multiplicative subgroup of the field (that is, a list of powers of some "generator" value). For example, you could use the finite field of integers modulo 
+        , and for the domain use 
+         (that's the powers of 
+         in the field, eg. 
+         % 
+        ; it stops at 
+         because the next power of 
+         cycles back to 
+        ). Futhermore, the multiplicative subgroup must have size 
+         (there's ways to make it work for numbers of the form 
+         and possibly slightly higher prime powers but then it gets much more complicated and inefficient). The finite field of intergers modulo 
+        , for example, would not work, because there are only multiplicative subgroups of order 
+        , 
+         and 
+        ; 
+         is too small to be interesting, and the factor 
+         is far too large to be FFT-friendly. The symmetry that comes from multiplicative groups of size 
+         lets us create a recursive algorithm that quite cleverly calculate the results we need from a much smaller amount of work.</p>

@@ -1,0 +1,28 @@
+<h1><center>Possible futures of the Ethereum protocol</center></h1><hr size="5" color="grey"<br><br><a href=""></a>
+<a href="blockchain.html">Blockchains</a>
+<a href="economics.html" style="float: right;">Economics</a>
+<center><a href="cryptography.html">Cryptography</a></center>
+<a href="General.html">General</a>
+<a href="gitcoin.html" style="float: right;">Gitcoin</a>
+<center><a href="math.html">math</a></center>
+<hr size="5" color="grey">
+<a href="front.html" style="float: right;">see all posts</a>
+<br>
+<p>Some things are just not easy to put into a single category. There are lots of "little things" in Ethereum protocol design that are very valuable for Ethereum's success, but don't fit nicely into a larger sub-category. In practice, about half of which has ended up being about EVM improvements of various kinds, and the rest is made up of various niche topics. This is what "the Splurge" is for.</p>
+<h3>The Splurge: key goals</h3><hr>
+<ul>
+    <li>Bring the EVM to a performant and stable "endgame state</li>
+    <li>Bring account abstraction in-protocol, allowing all users to benefit from much more secure and convenient accounts</li>
+    <li>Optimize transaction fee economics, increasing scalability while reducing risks</li>
+    <li>Explore advanced cryptography that could make Ethereum far better in the long run</li>
+</ul><h3>EVM improvements</h4>
+<h4>What problem does it solve?</h2>
+<p>The EVM today is difficult to statically analyze, making it difficult to create highly efficient implementations, formally verify code, and make further extensions to over time. Additionally, it is highly inefficient, making it difficult to implement many forms of advanced cryptography unless they are explicitly supported through precompiles.</p>
+<h4>What is it, and how does it work?</h4>
+<p>The first step in the current EVM improvement roadmap, scheduled to be included in the next hard fork, is the EVM Object Format (EOF). EOF is a series of EIPs that specifies a new version of EVM code that has a number of distinct features, most notably:</p>
+<ul>
+    <li>Separation between code (executable, but not readable from the EVM) and data (readable, but not executable)</li>
+    <li>Dynamic jumps banned, static jumps only.</li>
+    <li>EVM code can no longer observe gas-related information.</li>
+     <li>A new explicit subroutine mechanism is added.</li>
+</ul>

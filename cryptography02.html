@@ -1,0 +1,47 @@
+<h2><center>Exploring circle STARKs</center></h2><hr size="5" color="grey"<br><br><a href=""></a>
+<a href="blockchain.html">Blockchains</a>
+<a href="economics.html" style="float: right;">Economics</a>
+<center><a href="cryptography.html">Cryptography</a></center>
+<a href="General.html">General</a>
+<a href="gitcoin.html" style="float: right;">Gitcoin</a>
+<center><a href="math.html">math</a></center>
+<hr size="5" color="grey"><br>
+<a href="front.html" style="float: right;">see all posts </a><br><br>
+<p>The most important trend in STARK protocol design over the last two years has been the switch to working over small fields. The earliest production implementations of STARKs worked over 256-bit fields - arithmetic modulo large numbers such as 21888...95617 
+    - which made these protocols naturally compatible with verifying elliptic curve-based signatures, and made them easy to reason about. But this led to inefficiency: in most cases we don't actually have good ways to make use of these larger numbers, and so they ended up as mostly wasted space, and even more wasted computation, since arithmetic over 4x bigger numbers takes ~9x more computation time. To deal with this, STARKs have started working over smaller fields: first Goldilocks (modulus 
+   ) and then Mersenne31 and BabyBear (
+    and 
+   , respectively).</p>
+   <p>This switch has already led to demonstrated massive improvements in proving speed, most notably Starkware being able to prove 620,000 Poseidon2 hashes per second on an M3 laptop. Particularly, this means that, provided we're willing to trust Poseidon2 as a hash function, one of the hardest parts of making an efficient ZK-EVM is effectively solved. But how do these techniques work, and how do cryptographic proofs, which typically require large numbers for security, get built over these fields? And how do these protocols compare to even more exotic constructions such as Binius? This post will explore some of these nuances, with a particular eye to a construction called Circle STARKs (implemented in Starkware's stwo, Polygon's plonky3, and my own implementation in (sort of) python), which has some unique properties designed to be compatible with the highly efficient Mersenne31 field.</p>
+   <h3>Issues common to small fields</h3><hr>
+   <p>One of the most important "tricks" when making hash-based proofs (or really, any kind of proof) is the idea of proving things about evaluations of a polynomial as a random point, as a substitute for proving things about the underlying polynomials.</p>
+   <p>For example, suppose that a proof system requires you to generate a commitment to a polynomial, 
+    , which must satisfy 
+     (a pretty common type of claim to prove in ZK-SNARK protocols). The protocol can require you to pick a random coordinate 
+    , and prove that 
+    . And then in turn, to prove that 
+    , you prove that 
+     is a polynomial (as opposed to a fractional expression).</p>
+     <p>If you know 
+        ahead of time, you can always cheat these protocols. In this case, you could just set 
+        to be zero, retrofit 
+        to satisfy the equation, and then let 
+        be the line that passes through those two points. And similarly for the second step, if you know 
+        ahead of time, you can generate whatever 
+        you want, and then retrofit 
+        to match it, even if 
+        is a fractional (or other non-polynomial) expression.</p>
+        <h3>Regular FRI</h3><hr>
+        <p>When building a SNARK or STARK, the first step is typically arithmetization: reducing an arbitrary computation problem into an equation where some of the variables and coefficients are polynomials (eg. the equation often looks like 
+            , where 
+            , 
+             and 
+             are provided and the solver needs to provide 
+             and 
+            ). Once you have such an equation, a solution to the equation corresponds to a solution to the underlying computational problem.</p>
+            <ul>
+                <li>Suppose you have evaluations of a polynomial 
+                    , and you want to prove that its degree is </li>
+                    <li>Let 
+                        be a random linear combination </li>
+            </ul>

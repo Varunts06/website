@@ -1,0 +1,23 @@
+<h1><center>What I would love to see in a wallet</center></h1><hr size="5" color="grey"<br><br><a href=""></a>
+<a href="blockchain.html">Blockchains</a>
+<a href="economics.html" style="float: right;">Economics</a>
+<center><a href="cryptography.html">Cryptography</a></center>
+<a href="General.html">General</a>
+<a href="gitcoin.html" style="float: right;">Gitcoin</a>
+<center><a href="math.html">math</a></center>
+<hr size="5" color="grey"><br>
+<a href="front.html" style="float: right;">see all posts </a><br><br>
+<p>One critical layer of the Ethereum infrastructure stack, often underappreciated by core L1 researchers and developers, is the wallet. Wallets are the window between a user and the Ethereum world, and a user only benefits from any decentralization, censorship resistance, security, privacy, or other properties that Ethereum and its applications offer to the extent that the wallet itself also has these properties.</p>
+<p>Recently, we have seen a lot of progress on improving user experience, security and functionality of Ethereum wallets. The goal of this post is to give my own views of some of the properties that an ideal Ethereum wallet would have. This is not intended to be a complete list; reflecting my cypherpunk leanings, it focuses on security and privacy, and it is almost certainly incomplete on the user experience front. However, I would argue that wishlists are less effective for optimizing user experience than simply deploying and iterating based on feedback, and so I think it is most valuable to focus on the security and privacy properties.</p>
+<h3>User experience of cross l2 transactions </h3>
+<p>There is now an increasingly detailed roadmap for improving cross-L2 user experience, which has a short-term part and a long-term part. Here, I will talk about the short-term part: ideas which are theoretically implementable even today.
+
+    The core ideas are <b>(i) built-in cross-L2 sends</b> and <b>(ii) chain-specific addresses and payment requests</b> . Your wallet should be able to give you an address that (following the style of this draft ERC) </p>
+    <ul><li>
+        If you already have enough coins of the needed type on the destination chain, <b>send the coins directly</b>
+        <li>If you have coins of the needed type on another chain (or multiple other chains), <b> use a protocol like ERC-7683 </b>(effectively a cross-chain DEX) to send the coins</li>
+
+    </li></ul>
+    <h3>New users and in app wallets</h3>
+    <p>New users realistically will not want to have to enter a large number of guardians in their <b>first signup experience</b>. Hence, wallets should offer them a very simple option. One natural route is a 2-of-3 using zk-email on their email address, a key stored locally on the user's device (which could be a passkey), and a backup key held by the provider. As a user becomes more experienced, or accrues more assets, at some point they should be prompted to add more guardians.</p>
+<p><b>Wallets integrated in applications</b> are inevitable, because applications trying to appeal to non-crypto users do not want the confusing user experience of asking their users to download two new applications (the app itself, plus an Ethereum wallet) at the same time. However, a user of many application wallets should be able to link all of their wallets together, so that they only have one "access control thing" to worry about. The simplest way to do this is a hierarchical scheme, where there is a fast "linking" process that allows a user to set their primary wallet to be the guardian of all of their in-app wallets. The Farcaster client Warpcast supports this already</p>
